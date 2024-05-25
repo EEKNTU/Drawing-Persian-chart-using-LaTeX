@@ -1,0 +1,118 @@
+
+\documentclass[]{article}
+\usepackage[a3paper, margin=1in]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows.meta}
+\usepackage{float}
+\usepackage{afterpage}
+\usepackage{xepersian}
+
+
+\settextfont{XB Niloofar}
+
+
+
+\begin{document}
+	\begin{figure}[H]
+%	\begin{landscape}
+%	\begin{center}
+		\begin{RTL}
+		\begin{tikzpicture}[
+			node distance=2cm,
+			startstop/.style={rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!30},
+			process/.style={rectangle, minimum width=2cm, minimum height=1cm, text centered, draw=black, fill=orange!30},
+			decision/.style={diamond, minimum width=4cm, minimum height=3cm, text centered, draw=black, fill=green!30},
+			arrow/.style={thick,-{Stealth[length=2mm]}},
+			textnode/.style={text width=6cm, align=center}
+			]
+
+			% Nodes
+			
+			\node (start) [startstop] {\RL{شروع تست}};;
+			
+			\node (charger_health) [process, below of=start] {\RL{ تست سلامت شارژر و مدار کنترل شارژ دستگاه M8 با باتری و شارژر سالم  }};
+			
+			\node (current_check) [decision, below of=charger_health, yshift=-1cm] {\RL{جریان شارژ بیشتر از 5.0 آمپر؟}};
+			
+			\node (Device_fail) [process, right of=current_check, xshift=5cm] {\RL{مدار شارژ دستگاه معیوب است و دستگاه باید تعویض شود. }};
+			
+			\node (battery_health) [process, below of=current_check, yshift=-1.5cm] {\RL{اندازه گیری ولتاژ باتری با مولتی متر}};
+			
+			\node (voltage_check34) [decision, below of=battery_health, yshift=-1cm] {\RL{ولتاژ باتری کمتر از 4.3 ولت؟}};
+			
+			\node (charge_battery_0) [process, right of=voltage_check34, xshift=4cm] {\RL{شارژ باتری با منبع 2.4 ولت و 5.2 آمپر  به مدت 1 ساعت }};
+			
+			\node (charge_current_check) [decision, right of=charge_battery_0, xshift=4cm] {\RL{جریان شارژ کمتر از دو آمپر؟}};
+			
+			
+			
+			\node (voltage_check341) [decision, below of=charge_current_check, yshift=-2.5cm] {\RL{ولتاژ باتری کمتر از 4.3 ولت؟}};
+			
+			\node (load_test1) [process, below of=voltage_check34, yshift=-1.5cm] {\RL{ تست1  با loadtester با جریان یک آمپرو اندازه گیری افت ولتاژ}};
+			
+			
+			\node (Drop_voltage) [decision, below of=load_test1, yshift=-1.5cm] {\RL{افت ولتاژ بیشتر از 150 میلی ولت؟}};
+			
+			\node (voltage_measurement) [process, below of=Drop_voltage, yshift=-1.5cm] {\RL{اندازه گیری ولتاژ باتری با مولتی متر}};
+			
+			
+			
+			\node (voltage_check41) [decision, below of=voltage_measurement, yshift=-1cm] {\RL{ولتاژ باتری کمتر از 1.4 ولت؟}};
+			
+			\node (load_test2) [process, below of=voltage_check41, yshift=-1cm] {\RL{ تست2  با loadtester با جریان 5.2 آمپرو اندازه گیری ظرفیت باتری}};
+			
+			\node (charge_battery_1) [process, right of=voltage_check41, xshift=5cm] {\RL{شارژ باتری با منبع 2.4 ولت و 5.2 آمپر  به مدت 5.2 ساعت }};
+			
+			\node (voltage_check412) [decision, right of=charge_battery_1, xshift=4.5cm] {\RL{ولتاژ باتری کمتر از 1.4 ولت؟}};
+			
+			\node (Capacity) [decision, below of=load_test2, yshift=-1cm] {\RL{ظرفیت باتری کمتر از 4Ah ؟}};
+			
+			\node (healthy_battery) [process, below of=Capacity, yshift=-1cm] {\RL{باتری سالم است.}};
+			
+			\node (failed_battery) [process, right of= healthy_battery, yshift=-0cm, xshift=14cm] {\RL{باتری معیوب است.}};
+			
+			\node (stop) [startstop, right of=failed_battery, yshift=-2cm,xshift=2cm] {\RL{پایان تست}};;
+			
+			
+	
+			
+			
+			
+			% Arrows
+			\draw [arrow] (start) -- (charger_health);
+			\draw [arrow] (charger_health) -- (current_check);
+			\draw [arrow] (current_check) -- node[above] {خیر} (Device_fail);
+			\draw [arrow] (Device_fail) -| node[above] {} (stop);
+			\draw [arrow] (current_check) -- node[right] {بله} (battery_health);
+			\draw [arrow] (battery_health) -- (voltage_check34);
+			
+			\draw [arrow] (voltage_check34)  -- node[anchor=south, above] {بله} (charge_battery_0);
+			\draw [arrow] (voltage_check34)  -- node[anchor=south, right] {خیر} (load_test1);
+			
+			\draw [arrow] (charge_battery_0)  -- node[anchor=north, above] {} (charge_current_check);
+			\draw [arrow] (charge_current_check)  -| node[anchor=north, above] {بله} (failed_battery);
+			\draw [arrow] (charge_current_check)  -- node[anchor=north, right] {خیر} (voltage_check341);
+			\draw [arrow] (voltage_check341) -| node[right] {بله} (failed_battery);
+			\draw [arrow] (voltage_check341.west) -- + (-2,0) |- node[right] {خیر} (load_test1);
+			\draw [arrow] (load_test1) -- node[above] {} (Drop_voltage);
+			\draw [arrow] (Drop_voltage) -| node[right] {بله} (failed_battery);
+			\draw [arrow] (Drop_voltage) -- node[right] {خیر} (voltage_measurement);
+			\draw [arrow] (voltage_measurement) -- node[right] {} (voltage_check41);
+			\draw [arrow] (voltage_check41) -- node[above] {بله} (charge_battery_1);
+			\draw [arrow] (charge_battery_1) -- node[above] {} (voltage_check412);
+			\draw [arrow] (voltage_check412.east) -| node[right] {بله} (failed_battery);
+			\draw [arrow] (voltage_check412) |- node[right] {خیر} (load_test2);
+			
+			\draw [arrow] (voltage_check41) -- node[right] {خیر} (load_test2);
+			\draw [arrow] (load_test2) -- node[right] {} (Capacity);
+			\draw [arrow] (Capacity) -| node[right] {بله} (failed_battery);
+			\draw [arrow] (Capacity) -- node[right] {خیر} (healthy_battery);
+			\draw [arrow] (failed_battery) |- node[right] {} (stop);
+			\draw [arrow] (healthy_battery) |- node[right] {} (stop);
+			
+		\end{tikzpicture}
+	\end{RTL}
+%	\end{center}
+%\end{landscape}
+\end{figure}
+\end{document}
