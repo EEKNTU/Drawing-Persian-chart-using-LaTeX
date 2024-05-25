@@ -20,11 +20,20 @@ To compile the LaTeX document, you need to have a TeX distribution installed on 
 
 ### Installation
 
-1. Install a TeX distribution such as TeX Live (for Linux) or MiKTeX (for Windows).
-2. Ensure you have a LaTeX editor installed, such as TeXShop, TeXworks, or Overleaf for online editing.
+1. Install a TeX distribution such as TeX Live.
 
 ### Usage
 
 1. Clone this repository:
    ```sh
    git clone https://github.com/your-username/Drawing-Persian-chart-using-LaTeX.git
+Navigate to the repository directory:
+
+ ```sh
+Copy code
+cd Drawing-Persian-chart-using-LaTeX
+Compile the LaTeX document using xelatex:
+
+ ```sh
+Copy code
+xelatex main.tex
