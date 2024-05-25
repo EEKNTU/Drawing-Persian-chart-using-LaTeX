@@ -25,15 +25,16 @@ To compile the LaTeX document, you need to have a TeX distribution installed on 
 ### Usage
 
 1. Clone this repository:
+   
    ```sh
    git clone https://github.com/your-username/Drawing-Persian-chart-using-LaTeX.git
-Navigate to the repository directory:
 
+3. Navigate to the repository directory:
+   
  ```sh
-Copy code
 cd Drawing-Persian-chart-using-LaTeX
-Compile the LaTeX document using xelatex:
+
+4.Compile the LaTeX document using xelatex:
 
  ```sh
-Copy code
 xelatex main.tex
